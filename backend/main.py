@@ -1,10 +1,10 @@
 from flask import Flask, request
 from flaskext.mysql import MySQL
 app = Flask(__name__)
-app.config['MYSQL_DATABASE_USER'] = 'your_username'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'your_password'
-app.config['MYSQL_DATABASE_DB'] = 'your_database_name'
-app.config['MYSQL_DATABASE_HOST'] = 'localhost' # Replace with  MySQL server host
+app.config['MYSQL_HOST'] = 'inventoree-database.mysql.database.azure.com'
+app.config['MYSQL_USER'] = 'inventoreeadmin'
+app.config['MYSQL_PASSWORD'] = 'HackDavis2023'
+app.config['MYSQL_DB'] = 'inventoree-database'
 mysql = MySQL(app)
 def submit():
     # Access the submitted data
