@@ -1,7 +1,7 @@
 from / import app.py #Work in sync with app.py that Jason is working on
 import csv
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flaskext.mysql import MySQL
 app = Flask(__name__)
 
@@ -12,8 +12,17 @@ app.config['MYSQL_PASSWORD'] = 'HackDavis2023'
 app.config['MYSQL_DB'] = 'inventoree-database'
 mysql = MySQL(app)
 
-@app.route('/clothing', methods=['POST'])
 
+@app.route('/')
+def home():
+    return render_template("base.html")
+
+@app.route('/analytics')
+def load_analytics():
+    return render_template("analytics.html")
+
+
+@app.route('/clothing', methods=['POST'])
 def add_clothing():
     '''
     Take the json or csv file from the frontend, extract the data and store in SQL database
