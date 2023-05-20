@@ -1,0 +1,61 @@
+.layout {
+    width: 1366px;
+    height: 768px;
+
+    display: grid;
+    grid:
+        "sidebar body" 1fr
+        / auto 1fr;
+    gap: 8px;
+}
+
+.sidebar { grid-area: sidebar; }
+.body { grid-area: body; }
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevents scrolling */
+  }
+
+  .layout {
+    width: 1366px;
+    height: 768px;
+    display: grid;
+    grid:
+      "sidebar body" 1fr
+      / auto 1fr;
+    gap: 8px;
+  }
+
+  .sidebar { grid-area: sidebar; }
+  .body { grid-area: body; }
+
+  .sidebar {
+    background-color: white; /* Sidebar color changed to white */
+    color: black;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Uses flexbox */
+    flex-direction: column; /* Stacks list items vertically */
+    align-items: center; /* Centers elements horizontally */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+  }
+
+  .sidebar ul {
+    list-style: none; /* Removes bullet points */
+    padding: 0;
+    margin: 0;
+  }
+
+  .sidebar ul li {
+    margin-bottom: 20px; /* Adjusted margin between list items */
+  }
+
+  .content {
+    padding: 20px;
+    display: flex; /* Uses flexbox */
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+  }
