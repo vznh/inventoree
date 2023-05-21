@@ -1,12 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Inventory Tracking App</title>
-  <link rel="stylesheet" href="css/styleB.css">
+  <title>inventree</title>
+  <style>
+    .layout {
+    width: 1366px;
+    height: 768px;
 
+    display: grid ;
+
+    gap: 8px;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents scrolling */
+      }
+
+
+    .body { grid-area: body; }
+
+    .content {
+      padding: 40px;
+      display: flex; /* Uses flexbox */
+      justify-content: center; /* Centers content horizontally */
+      align-items: center; /* Centers content vertically */
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+    }
+  </style>
 </head>
 <body>
-  <div class="layout">
     <div class="sidebar">
     <div class="body">
       <div class="content">
@@ -42,7 +66,6 @@
         </div>        
       </div>
     </div>
-  </div>
 </body>
 <footer>
     <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>

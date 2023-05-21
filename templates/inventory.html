@@ -1,15 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Inventory Tracking App</title>
-  <link rel="stylesheet" href="css/styleB.css">
+  <title>inventree</title>
+  <style>
+    .layout {
+    width: 1366px;
+    height: 768px;
+
+    display: grid ;
+
+    gap: 8px;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents scrolling */
+      }
+
+
+    .body { grid-area: body; }
+
+    .content {
+      padding: 40px;
+      display: flex; /* Uses flexbox */
+      justify-content: center; /* Centers content horizontally */
+      align-items: center; /* Centers content vertically */
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+    }
+  </style>
 
 </head>
 <body>
-  <div class="layout">
+  <div class="content">
     <div class="sidebar">
       <ul>
-        <li><a href="/analytics">Analytics</a></li>
         <li><a href="/inventory">Inventory</a></li>
         <li>Store</li>
         <li>Settings</li>
@@ -18,9 +43,13 @@
     </div>
     <div class="body">
       <div class="content">
-        <h1>No option selected</h1>
-      </div>
+        <div style="text-align: center;">
+          <a class="et_pb_button" title="options" href="https://www.youtube.com">Add Inventory</a>
+          <a class="et_pb_button" title="options" href="https://www.google.com">Remove Inventory</a>
+          <a class="et_pb_button" title="options" href="https://chat.openai.com/?model=text-davinci-002-render-sha">View Inventory</a>
+        </div>        
     </div>
+  </div>
   </div>
 </body>
 </html>
