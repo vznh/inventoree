@@ -97,6 +97,7 @@
             <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a>
           </div>
           <h1>Manually Input</h1>
+          <form id="myForm" action="/submit" method="post">
           <table>
             <tr>
               <th></th>
@@ -108,31 +109,70 @@
             </tr>
             <tr>
               <td></td>
-              <td contenteditable="true">Shirt</td>
-              <td contenteditable="true">1</td>
+              <td>
+                <select>
+                  <option value="Shirts">Shirts</option>
+                  <option value="Bottoms">Bottoms</option>
+                  <option value="Shoes">Shoes</option>
+                  <option value="Dress">Dress</option> 
+                  <option value="Outerwear">Outerwear</option>
+                  <option value="Books">Books</option>
+                  <option value="household">Household</option>
+                  <option value="school supplies">School Supplies</option>
+                  <option value="misc.">Misc.</option>
+                  <!-- Add more options as needed -->
+                </select>
+              </td>
+              <td contenteditable="true">0</td>
               <td contenteditable="true">Y</td>
               <td contenteditable="true">5/21/23</td>
               <td contenteditable="true">3:45</td>
             </tr>
             <tr>
               <td></td>
-              <td contenteditable="true">Pants</td>
-              <td contenteditable="true">1</td>
+              <td>
+                <select>
+                  <option value="Shirts">Shirts</option>
+                  <option value="Bottoms">Bottoms</option>
+                  <option value="Shoes">Shoes</option>
+                  <option value="Dress">Dress</option> 
+                  <option value="Outerwear">Outerwear</option>
+                  <option value="Books">Books</option>
+                  <option value="household">Household</option>
+                  <option value="school supplies">School Supplies</option>
+                  <option value="misc.">Misc.</option>
+                  <!-- Add more options as needed -->
+                </select>
+              </td>
+              <td contenteditable="true">0</td>
               <td contenteditable="true">Y</td>
               <td contenteditable="true">5/21/23</td>
-              <td contenteditable="true">3:44</td>
+              <td contenteditable="true">3:44</td> <!-- implement curr date/time -->
             </tr>
             <tr>
               <td></td>
-              <td contenteditable="true">Jacket</td>
-              <td contenteditable="true">1</td>
+              <td>
+                <select>
+                  <option value="Shirts">Shirts</option>
+                  <option value="Bottoms">Bottoms</option>
+                  <option value="Shoes">Shoes</option>
+                  <option value="Dress">Dress</option> 
+                  <option value="Outerwear">Outerwear</option>
+                  <option value="Books">Books</option>
+                  <option value="household">Household</option>
+                  <option value="school supplies">School Supplies</option>
+                  <option value="misc.">Misc.</option>
+                </select>
+              </td>
+              <td contenteditable="true">0</td>
               <td contenteditable="true">Y</td>
-              <td contenteditable="true">5/21/23</td>
+              <td contenteditable="true">5/21/23</td> 
               <td contenteditable="true">3:56</td>
             </tr>
           </table>
+          </form>
           <div class="submit-button">
-            <button onclick="submitForm()">Submit</button>
+            <button type="submit">Submit</button>
           </div>
         </div>        
       </div>
@@ -140,13 +180,61 @@
   </div>
   <footer>
     <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
     <script>
-      function submitForm() {
-        // Perform actions when the form is submitted
-        // Redirect to "/index"
-        window.location.href = "/";
-      }
-    </script>
+      document.getElementById("myForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Prevent the default form submission
+  
+        // Get the table element
+        var table = document.querySelector('table');
+  
+        // Create an array to store the table data
+        var tableData = [];
+  
+        // Iterate over each table row
+        var rows = table.rows;
+        for (var i = 1; i < rows.length; i++) { // Start from index 1 to skip the header row
+          var row = rows[i];
+          var rowData = {};
+  
+          // Iterate over each cell in the row
+          var cells = row.cells;
+          for (var j = 1; j < cells.length; j++) { // Start from index 1 to skip the first empty cell
+            var cell = cells[j];
+            var columnName = table.rows[0].cells[j].innerText; // Get the column name from the header row
+            rowData[columnName] = cell.innerText;
+          }
+  
+          // Add the row data to the tableData array
+          tableData.push(rowData);
+        }
+  
+        // Create the JSON payload
+        var payload = {
+          'tableData': tableData
+        };
+  
+        // Create and send an AJAX request to the Flask backend
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/submit");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.onload = function() {
+          if (xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText);
+            console.log(response);
+            // Process the response data as needed
+          } else {
+            console.error("Error: " + xhr.status);
+          }
+        };
+        xhr.send(JSON.stringify(payload));
+      });
+        // Add event listener for the button click
+    document.querySelector('.submit-button button').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevent the default button click behavior
+    document.getElementById("myForm").submit(); // Manually trigger the form submission
+  });
+    </script> 
   </footer>
 </body>
 </html>

@@ -96,33 +96,15 @@
             <a href="#settings"> <i class="fa-solid fa-gear"></i> Settings </a>
             <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a>
           </div>
-          <h1>Edit/Remove Inventory</h1>
+          <h1>View Inventory</h1>
           <table>
-            <tr>
-              <th></th>
-              <th>Type</th>
-              <th>Quantity</th>
-              <th>1/17</th>
-              <th>1/18</th>
-              <th>Total</th>
-            </tr>
-            <tr>
-              <td></td>
-              <td contenteditable="true">Shirt</td>
-              <td contenteditable="true">1</td>
-              <td contenteditable="true">4</td>
-              <td contenteditable="true">5</td>
-              <td contenteditable="true">9</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td contenteditable="true">Pants</td>
-              <td contenteditable="true">4</td>
-              <td contenteditable="true">9</td>
-              <td contenteditable="true">13</td>
-              <td contenteditable="true">22</td>
-            </tr>
-          </table>
+              <tr>
+                <th></th>
+                <th>Type</th>
+                <th>Quantity</th>
+                <th>Date/Time</th>
+              </tr>
+            </table>
           <div class="submit-button">
             <button onclick="submitForm()">Submit</button>
           </div>
@@ -133,10 +115,44 @@
   <footer>
     <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
     <script>
-      function submitForm() {
-        // Perform actions when the form is submitted
-        // Redirect to "/index"
-        window.location.href = "/";
+        // Make an AJAX request to fetch the JSON data from Flask
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '/get_data'); // Replace '/get_data' with your Flask route that returns the JSON data
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          var jsonData = JSON.parse(xhr.responseText);
+          populateTable(jsonData);
+        } else {
+          console.error('Error:', xhr.status);
+        }
+      };
+      xhr.send();
+
+      // Function to populate the table with the received JSON data
+      function populateTable(jsonData) {
+        var table = document.querySelector('table');
+
+        for (var key in jsonData) {
+          var row = document.createElement('tr');
+          var typeCell = document.createElement('td');
+          var quantityCell = document.createElement('td');
+          var dateTimeCell = document.createElement('td');
+
+          typeCell.contentEditable = true;
+          typeCell.innerText = key;
+
+          quantityCell.contentEditable = true;
+          quantityCell.innerText = jsonData[key].quantity;
+
+          dateTimeCell.contentEditable = true;
+          dateTimeCell.innerText = jsonData[key].date_times[0];
+
+          row.appendChild(typeCell);
+          row.appendChild(quantityCell);
+          row.appendChild(dateTimeCell);
+
+          table.appendChild(row);
+        }
       }
     </script>
   </footer>

@@ -3,6 +3,7 @@ from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from datetime import datetime
+from requests_oauthlib import OAuth2Session
 import os
 
 app = Flask(__name__)
@@ -38,6 +39,39 @@ def display_editor():
 def display_confirmation():
     return render_template("processing.html")
 
+@app.route('/massUpload')
+def display_upload():
+    return render_template("massUpload.html")
+
+@app.route('/verifyInventory')
+def verify_inventory():
+    return render_template("verifyInventory.html")
+
+@app.route('/removeInventory')
+def view_inv():
+    return render_template("removeInventory.html")
+
+@app.route('/checkout')
+def checkout_items():
+    return render_template("checkout.html")
+
+@app.route('/manualUpload')
+def manual_upload():
+    return render_template("manualUpload.html")
+
+@app.route('/submit', methods=['POST'])
+def submit_tab():
+    if request.method == 'POST':
+        form_data = request.get_json()
+        # Process the form data here
+        # You can access the submitted values using form_data['name']
+        # Perform any necessary actions with the data
+
+        # Create a JSON response
+        response = {'status': 'success', 'message': 'Form submitted successfully'}
+        return jsonify(response)
+    return render_template("submit.html")
+
 '''
 To be called functions
 '''
@@ -72,7 +106,7 @@ def initialize_database():
             collection = db[collection_name]
 
             # Create and insert documents for each type
-            types = ["pants", "shirts", "dress", "outerwear", "accessories", "shoes", "books", "household", "school supplies", "bottoms", "misc."]
+            types = ["shirts", "dress", "outerwear", "accessories", "shoes", "books", "household", "school supplies", "bottoms", "misc."]
             for item_type in types:
                 document = {
                     "type": item_type,
@@ -148,6 +182,17 @@ def find_to_return(collection_name) -> dict:
             "date_times": date_times
     }
     return data_map
+
+
+@app.route('/get_data', methods=['GET'])
+def get_data():
+    current_date = datetime.now()
+    # Get the month name
+    month_name = current_date.strftime('%B')
+    x = find_to_return(f"2023_{month_name}")
+    return jsonify(x)
     
 if __name__ == '__main__':
+    collections = db.list_collection_names()
+    print(collections)
     app.run(debug=True)
