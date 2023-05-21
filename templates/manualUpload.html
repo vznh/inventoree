@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>inventree</title>
+
   <style>
     .layout {
       width: 1366px;
@@ -16,20 +17,59 @@
       overflow: hidden; /* Prevents scrolling */
     }
 
-    .body {
-      grid-area: body;
-    }
+    .body { grid-area: body; }
 
     .content {
       padding: 40px;
-      display: flex; /* Uses flexbox */
-      justify-content: center; /* Centers content horizontally */
-      align-items: center; /* Centers content vertically */
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
-    .button {
-      display: inline-block;
+    .topnav {
+      margin-bottom: 20px;
+    }
+
+    .topnav a {
+      color: #000;
+      text-decoration: none;
+      padding: 8px 16px;
+    }
+
+    .topnav a:hover {
+      background-color: #ddd;
+      color: #000;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 600px; /* Set maximum width for the table */
+      margin-bottom: 20px;
+      border: 1px solid #ccc; /* Add a border */
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    td[contenteditable="true"] {
+      background-color: #fff;
+    }
+
+    .submit-button {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .submit-button button {
       padding: 10px 20px;
       font-size: 16px;
       background-color: #4CAF50;
@@ -40,14 +80,11 @@
       transition: background-color 0.3s;
     }
 
-    .button:hover {
+    .submit-button button:hover {
       background-color: #45a049;
     }
-
-    .file-input {
-      margin-bottom: 10px;
-    }
   </style>
+
 </head>
 <body>
   <div class="sidebar">
@@ -55,33 +92,59 @@
       <div class="content">
         <div style="text-align: center;">
           <div class="topnav">
-            <a class="active" href="/base"> <i class="fa-solid fa-house"></i> Home </a>
+            <a class="active" href="/"> <i class="fa-solid fa-house"></i> Home </a>
             <a href="#settings"> <i class="fa-solid fa-gear"></i> Settings </a>
             <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a>
           </div>
-          <h1>Please Input Photos:</h1>
-          <input type="file" id="photoInput" accept="image/*" multiple class="file-input">
-          <button onclick="upload()" class="button">Upload</button>
-        </div>
+          <h1>Manually Input</h1>
+          <table>
+            <tr>
+              <th></th>
+              <th>Type</th>
+              <th>Quantity</th>
+              <th>Davis Student?</th>
+              <th>Date</th>
+              <th>Time</th>
+            </tr>
+            <tr>
+              <td></td>
+              <td contenteditable="true">Shirt</td>
+              <td contenteditable="true">1</td>
+              <td contenteditable="true">Y</td>
+              <td contenteditable="true">5/21/23</td>
+              <td contenteditable="true">3:45</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td contenteditable="true">Pants</td>
+              <td contenteditable="true">1</td>
+              <td contenteditable="true">Y</td>
+              <td contenteditable="true">5/21/23</td>
+              <td contenteditable="true">3:44</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td contenteditable="true">Jacket</td>
+              <td contenteditable="true">1</td>
+              <td contenteditable="true">Y</td>
+              <td contenteditable="true">5/21/23</td>
+              <td contenteditable="true">3:56</td>
+            </tr>
+          </table>
+          <div class="submit-button">
+            <button onclick="submitForm()">Submit</button>
+          </div>
+        </div>        
       </div>
     </div>
   </div>
   <footer>
     <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
     <script>
-      function upload() {
-        var photoInput = document.getElementById("photoInput");
-        var files = photoInput.files;
-        if (files.length > 0) {
-          // Perform desired actions with the uploaded files
-          for (var i = 0; i < files.length; i++) {
-            console.log("File uploaded:", files[i].name);
-          }
-          // Redirect to verifyInventory.html
-          window.location.href = "/verifyInventory";
-        } else {
-          alert("No files selected!");
-        }
+      function submitForm() {
+        // Perform actions when the form is submitted
+        // Redirect to "/index"
+        window.location.href = "/";
       }
     </script>
   </footer>

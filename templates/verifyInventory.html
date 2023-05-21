@@ -2,72 +2,143 @@
 <html>
 <head>
   <title>inventree</title>
+
   <style>
     .layout {
-    width: 1366px;
-    height: 768px;
-
-    display: grid ;
-
-    gap: 8px;
+      width: 1366px;
+      height: 768px;
+      display: grid;
+      gap: 8px;
     }
 
     body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden; /* Prevents scrolling */
-      }
-
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Prevents scrolling */
+    }
 
     .body { grid-area: body; }
 
     .content {
       padding: 40px;
-      display: flex; /* Uses flexbox */
-      justify-content: center; /* Centers content horizontally */
-      align-items: center; /* Centers content vertically */
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .topnav {
+      margin-bottom: 20px;
+    }
+
+    .topnav a {
+      color: #000;
+      text-decoration: none;
+      padding: 8px 16px;
+    }
+
+    .topnav a:hover {
+      background-color: #ddd;
+      color: #000;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 600px; /* Set maximum width for the table */
+      margin-bottom: 20px;
+      border: 1px solid #ccc; /* Add a border */
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    td[contenteditable="true"] {
+      background-color: #fff;
+    }
+
+    .submit-button {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .submit-button button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #FFFFFF;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .submit-button button:hover {
+      background-color: #45a049;
     }
   </style>
+
 </head>
 <body>
-    <div class="sidebar">
+  <div class="sidebar">
     <div class="body">
       <div class="content">
         <div style="text-align: center;">
           <div class="topnav">
-            <a class="active" href="base.html"> <i class="fa-solid fa-house"></i> Home </a>
+            <a class="active" href="/index"> <i class="fa-solid fa-house"></i> Home </a>
             <a href="#settings"> <i class="fa-solid fa-gear"></i> Settings </a>
             <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a>
           </div>
-            <h1>Add Inventory</h1>
-          <table>            
+          <h1>Verify Inventory</h1>
+          <table>
             <tr>
-              <th>Picture</th>
-              <th>Item Type</th>
-              <th>Date Entered</th>
+              <th></th>
+              <th>Type</th>
+              <th>Quantity</th>
+              <th>Davis Student?</th>
+              <th>Date</th>
+              <th>Time</th>
             </tr>
             <tr>
-              <td>image</td>
-              <td>type</td>
-              <td>date</td>
+              <td></td>
+              <td contenteditable="true">Shirt</td>
+              <td contenteditable="true">1</td>
+              <td contenteditable="true">Y</td>
+              <td contenteditable="true">5/21/23</td>
+              <td contenteditable="true">3:45</td>
             </tr>
             <tr>
-              <td>image</td>
-              <td>type</td>
-              <td>date</td>
-            </tr>
-            <tr>
-              <td>image</td>
-              <td>type</td>
-              <td>date</td>
+              <td></td>
+              <td contenteditable="true">Pants</td>
+              <td contenteditable="true">1</td>
+              <td contenteditable="true">Y</td>
+              <td contenteditable="true">5/21/23</td>
+              <td contenteditable="true">3:44</td>
             </tr>
           </table>
+          <div class="submit-button">
+            <button onclick="submitForm()">Submit</button>
+          </div>
         </div>        
       </div>
     </div>
-</body>
-<footer>
+  </div>
+  <footer>
     <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
-</footer>
+    <script>
+      function submitForm() {
+        // Perform actions when the form is submitted
+        // Redirect to "/index"
+        window.location.href = "/";
+      }
+    </script>
+  </footer>
+</body>
 </html>

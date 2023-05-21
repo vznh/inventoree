@@ -13,7 +13,7 @@
     body {
       margin: 0;
       padding: 0;
-      overflow: hidden; /* Prevents scrolling */
+      overflow: auto; /* Enable scrolling */
     }
 
     .body {
@@ -22,30 +22,65 @@
 
     .content {
       padding: 40px;
-      display: flex; /* Uses flexbox */
-      justify-content: center; /* Centers content horizontally */
-      align-items: center; /* Centers content vertically */
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
-    .button {
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 600px; /* Set maximum width for the table */
+      margin-bottom: 20px;
+      border: 1px solid #ccc; /* Add a border */
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .thumbnail {
       display: inline-block;
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+    }
+
+    .topnav {
+      margin-bottom: 20px;
+    }
+
+    .topnav a {
+      color: #000;
+      text-decoration: none;
+      padding: 8px 16px;
+    }
+
+    .topnav a:hover {
+      background-color: #ddd;
+      color: #000;
+    }
+
+    .submit-button {
       padding: 10px 20px;
       font-size: 16px;
       background-color: #4CAF50;
-      color: #FFFFFF;
+      color: #fff;
       border: none;
       cursor: pointer;
       border-radius: 4px;
       transition: background-color 0.3s;
+      margin-top: 20px;
     }
 
-    .button:hover {
+    .submit-button:hover {
       background-color: #45a049;
-    }
-
-    .file-input {
-      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -55,35 +90,124 @@
       <div class="content">
         <div style="text-align: center;">
           <div class="topnav">
-            <a class="active" href="/base"> <i class="fa-solid fa-house"></i> Home </a>
+            <a class="active" href="/index"> <i class="fa-solid fa-house"></i> Home </a>
             <a href="#settings"> <i class="fa-solid fa-gear"></i> Settings </a>
             <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a>
           </div>
-          <h1>Please Input Photos:</h1>
-          <input type="file" id="photoInput" accept="image/*" multiple class="file-input">
-          <button onclick="uploadAndSubmit()" class="button">Upload & Submit</button>
+          <h1>Mass Upload</h1>
+          <input type="file" id="image-input" accept="image/*" multiple>
+          <div id="predictions-container"></div>
+          <button class="submit-button" onclick="submitData()">Submit</button>
+          <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+          <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
+
+          <script type="text/javascript">
+            // the link to your model provided by Teachable Machine export panel
+            const URL = "https://teachablemachine.withgoogle.com/models/zqV4HEFdC/";
+
+            let model, maxPredictions;
+            let predictionData = [];
+
+            // Load the image model
+            async function init() {
+              const modelURL = URL + "model.json";
+              const metadataURL = URL + "metadata.json";
+
+              // load the model and metadata
+              model = await tmImage.load(modelURL, metadataURL);
+              maxPredictions = model.getTotalClasses();
+            }
+
+            // Handle file input change event
+            document.getElementById("image-input").addEventListener("change", function(event) {
+              const files = event.target.files;
+              if (files && files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                  const file = files[i];
+                  const reader = new FileReader();
+                  reader.onload = async function(e) {
+                    const image = new Image();
+                    image.onload = async function() {
+                      const prediction = await predict(image);
+                      const topPrediction = getTopPrediction(prediction);
+                      predictionData.push({ image: image.src, prediction: topPrediction });
+                      displayPrediction(topPrediction, image.src);
+                    };
+                    image.src = e.target.result;
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }
+            });
+
+            // Run the image through the image model and make predictions
+            async function predict(image) {
+              const prediction = await model.predict(image);
+              return prediction;
+            }
+
+            // Get the prediction with the highest confidence level
+            function getTopPrediction(prediction) {
+              let topPrediction = null;
+              let topConfidence = -1;
+
+              for (let i = 0; i < maxPredictions; i++) {
+                const classPrediction = prediction[i];
+                if (classPrediction.probability > topConfidence) {
+                  topPrediction = classPrediction;
+                  topConfidence = classPrediction.probability;
+                }
+              }
+
+              return topPrediction;
+            }
+
+            // Display the top prediction and the image in a table
+            function displayPrediction(prediction, imageSrc) {
+              const predictionsContainer = document.getElementById("predictions-container");
+              const table = document.createElement("table");
+
+              const row = table.insertRow();
+              const imageCell = row.insertCell();
+              const predictionCell = row.insertCell();
+
+              const thumbnail = document.createElement("img");
+              thumbnail.src = imageSrc;
+              thumbnail.classList.add("thumbnail");
+              imageCell.appendChild(thumbnail);
+
+              if (prediction) {
+                const classPrediction = `${prediction.className}: ${prediction.probability.toFixed(2)}`;
+                predictionCell.textContent = classPrediction;
+              } else {
+                predictionCell.textContent = "No prediction found.";
+              }
+
+              predictionsContainer.appendChild(table);
+            }
+
+            // Submit the data to verifyInventory.html
+            function submitData() {
+              // Convert the prediction data to JSON string
+              const jsonData = JSON.stringify(predictionData);
+              // Store the data in localStorage or send it to the server
+              localStorage.setItem("predictionData", jsonData);
+              // Redirect to verifyInventory.html
+              window.location.href = "/verifyInventory";
+            }
+
+            // Initialize the model when the webpage opens
+            window.onload = function() {
+              init();
+            };
+          </script>
         </div>
       </div>
     </div>
   </div>
-  <footer>
-    <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
-    <script>
-      function uploadAndSubmit() {
-        var photoInput = document.getElementById("photoInput");
-        var files = photoInput.files;
-        if (files.length > 0) {
-          // Perform desired actions with the uploaded files
-          for (var i = 0; i < files.length; i++) {
-            console.log("File uploaded:", files[i].name);
-          }
-          // Redirect to verifyInventory.html
-          window.location.href = "verifyInventory.html";
-        } else {
-          alert("No files selected!");
-        }
-      }
-    </script>
-  </footer>
 </body>
 </html>
+
+
+

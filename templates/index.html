@@ -1,54 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Inventory Tracking App</title>
+  <title>iventree</title>
   <style>
-    .layout {
-    width: 1366px;
-    height: 768px;
-
-    display: grid ;
-
-    gap: 8px;
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
-    body {
-        margin: 0;
-        padding: 0;
-        overflow: hidden; /* Prevents scrolling */
-      }
-
-
-    .body { grid-area: body; }
+    .body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
 
     .content {
+      text-align: center;
+      background-color: #fff;
       padding: 40px;
-      display: flex; /* Uses flexbox */
-      justify-content: center; /* Centers content horizontally */
-      align-items: center; /* Centers content vertically */
-      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .topnav {
+      margin-bottom: 20px;
+    }
+
+    .topnav a {
+      color: #000;
+      text-decoration: none;
+      padding: 8px 16px;
+    }
+
+    .topnav a:hover {
+      background-color: #ddd;
+      color: #000;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+      margin-right: 10px;
+    }
+
+    .button:hover {
+      background-color: #45a049;
     }
   </style>
-
 </head>
 <body>
-    <div class="body">
-      <div class="content">
-        <div style="text-align: center;">
-          <div class="topnav">
-            <a class="active" href="/"> <i class="fa-solid fa-house"></i> Home </a>
-            <a href="#settings"> <i class="fa-solid fa-gear"></i> Settings </a>
-            <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a>
-          </div>
-          <h1>inventree</h1>          
-          <a class="button" title="options" href="/addInventory">Add Inventory</a>
-          <a class="button" title="options" href="/removeInventory">Edit/Remove</a>
-        </div>        
+  <div class="body">
+    <div class="content">
+      <div class="topnav">
+        <a class="active" href="/"> <i class="fa-solid fa-house"></i> Home </a>
+        <a href="#settings"> <i class="fa-solid fa-gear"></i> Settings </a>
+        <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a>
       </div>
+      <h1>inventree</h1>
+      <a class="button" title="options" href="/addInventory">Add Inventory</a>
+      <a class="button" title="options" href="/removeInventory">Edit/Remove</a>
+      <a class="button" title="options" href="/checkout">Checkout</a>
     </div>
   </div>
+  <footer>
+    <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
+  </footer>
 </body>
-<footer>
-  <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
-</footer>
 </html>
+
