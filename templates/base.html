@@ -6,25 +6,26 @@
 
 </head>
 <body>
-  <div class="layout">
-    <div class="sidebar">
-      <ul>
-        <li><a href="/analytics">Analytics</a></li>
-        <li><a href="/inventory">Inventory</a></li>
-        <li>Store</li>
-        <li>Settings</li>
-        <li>Log Out</li>
-      </ul>
-    </div>
     <div class="body">
       <div class="content">
         <div style="text-align: center;">
-          <a class="et_pb_button" title="options" href="https://www.youtube.com">Add Inventory</a>
-          <a class="et_pb_button" title="options" href="https://www.google.com">Remove Inventory</a>
-          <a class="et_pb_button" title="options" href="https://chat.openai.com/?model=text-davinci-002-render-sha">View Inventory</a>
+          <div class="topnav">
+            <a class="active" href="http://127.0.0.1:5500/templates/base.html"> <i class="fa-solid fa-house"></i> Home </a>
+            <a href="#settings"> <i class="fa-solid fa-gear"></i> Settings </a>
+            <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a>
+          </div>
+          <h1>INVENTREE</h1>          
+          <a class="button" title="options" href="http://127.0.0.1:5500/templates/addInventory.html">Add Inventory</a>
+          <a class="button" title="options" href="http://127.0.0.1:5500/templates/removeInventory.html">Remove Inventory</a>
+          <div>
+            <a class="button" title="options" href="http://127.0.0.1:5500/templates/viewInventory.html">View Inventory</a>
+          </div>
         </div>        
       </div>
     </div>
   </div>
 </body>
+<footer>
+  <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
+</footer>
 </html>
