@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>inventree</title>
+  <style>
+    .layout {
+      width: 1366px;
+      height: 768px;
+      display: grid;
+      gap: 8px;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden; /* Prevents scrolling */
+    }
+
+    .body {
+      grid-area: body;
+    }
+
+    .content {
+      padding: 40px;
+      display: flex; /* Uses flexbox */
+      justify-content: center; /* Centers content horizontally */
+      align-items: center; /* Centers content vertically */
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #FFFFFF;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #45a049;
+    }
+
+    .file-input {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="body">
+      <div class="content">
+        <div style="text-align: center;">
+          <div class="topnav">
+            <a class="active" href="/base"> <i class="fa-solid fa-house"></i> Home </a>
+            <a href="#settings"> <i class="fa-solid fa-gear"></i> Settings </a>
+            <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a>
+          </div>
+          <h1>Please Input Photos:</h1>
+          <input type="file" id="photoInput" accept="image/*" multiple class="file-input">
+          <button onclick="uploadAndSubmit()" class="button">Upload & Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
+    <script>
+      function uploadAndSubmit() {
+        var photoInput = document.getElementById("photoInput");
+        var files = photoInput.files;
+        if (files.length > 0) {
+          // Perform desired actions with the uploaded files
+          for (var i = 0; i < files.length; i++) {
+            console.log("File uploaded:", files[i].name);
+          }
+          // Redirect to verifyInventory.html
+          window.location.href = "verifyInventory.html";
+        } else {
+          alert("No files selected!");
+        }
+      }
+    </script>
+  </footer>
+</body>
+</html>

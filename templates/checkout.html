@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>inventree</title>
+  <style>
+    .layout {
+    width: 1366px;
+    height: 768px;
+
+    display: grid ;
+
+    gap: 8px;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevents scrolling */
+      }
+
+
+    .body { grid-area: body; }
+
+    .content {
+      padding: 40px;
+      display: flex; /* Uses flexbox */
+      justify-content: center; /* Centers content horizontally */
+      align-items: center; /* Centers content vertically */
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Set font to Helvetica Neue */
+    }
+  </style>
+
+</head>
+<body>
+    <div class="body">
+      <div class="content">
+        <div style="text-align: center;">
+          <div class="topnav">
+            <a class="active" href="/"> <i class="fa-solid fa-house"></i> Home </a>
+            <a href="#settings"> <i class="fa-solid fa-gear"></i> Settings </a>
+            <a href="#logout"> <i class="fa-solid fa-right-from-bracket"></i> Logout </a> 
+
+            <h1>Checkout</h1>
+            
+            <div>
+            <label for="clothingSelect">Select item(s) of clothing:</label>
+            <select id="clothingSelect">
+              <option value="Shirt">Shirts</option>
+              <option value="Pant">Pants</option>
+              <option value="Jacket">Jackets</option>
+            </select>
+            
+            <label for="quantityInput">Quantity:</label>
+            <input type="number" id="quantityInput" min="1" value="1">
+            
+            <button onclick="addToCart()">Add to Cart</button>
+            
+            <div id="cart"></div>
+            
+            <div id="submitContainer" style="text-align: right; padding-top: 10px;">
+              <button id="submitBtn">Submit</button>
+            </div>
+            
+            <script>
+              var cartData = [];
+            
+              function addToCart() {
+                var selectElement = document.getElementById("clothingSelect");
+                var quantityInput = document.getElementById("quantityInput");
+                var selectedOption = selectElement.options[selectElement.selectedIndex];
+                var quantity = parseInt(quantityInput.value);
+            
+                if (selectedOption && quantity > 0) {
+                  var selectedClothing = selectedOption.value;
+            
+                  var itemExists = false;
+            
+                  for (var i = 0; i < cartData.length; i++) {
+                    if (cartData[i].clothing === selectedClothing) {
+                      cartData[i].quantity += quantity;
+                      itemExists = true;
+                      break;
+                    }
+                  }
+            
+                  if (!itemExists) {
+                    cartData.push({ clothing: selectedClothing, quantity: quantity });
+                  }
+            
+                  displayCart();
+                  clearInputs();
+                } else {
+                  alert("Invalid input! Please select an item of clothing and specify a valid quantity.");
+                  // Perform any desired actions for an invalid input here
+                }
+              }
+            
+              function removeFromCart(index) {
+                cartData[index].quantity--;
+            
+                if (cartData[index].quantity <= 0) {
+                  cartData.splice(index, 1);
+                }
+            
+                displayCart();
+              }
+            
+              function displayCart() {
+                var cartContainer = document.getElementById("cart");
+                cartContainer.innerHTML = "<h3>Cart:</h3>";
+            
+                if (cartData.length > 0) {
+                  var cartList = document.createElement("ul");
+            
+                  for (var i = 0; i < cartData.length; i++) {
+                    var cartItem = document.createElement("li");
+                    cartItem.textContent = cartData[i].quantity + " " + cartData[i].clothing;
+            
+                    var removeButton = document.createElement("button");
+                    removeButton.textContent = "Remove";
+                    removeButton.setAttribute("onclick", "removeFromCart(" + i + ")");
+                    cartItem.appendChild(removeButton);
+            
+                    cartList.appendChild(cartItem);
+                  }
+            
+                  cartContainer.appendChild(cartList);
+                } else {
+                  cartContainer.innerHTML += "<p>Nothing in cart.</p>";
+                }
+            
+                var submitContainer = document.getElementById("submitContainer");
+                submitContainer.style.display = cartData.length > 0 ? "block" : "none";
+              }
+            
+              function clearInputs() {
+                var selectElement = document.getElementById("clothingSelect");
+                var quantityInput = document.getElementById("quantityInput");
+            
+                selectElement.selectedIndex = -1;
+                quantityInput.value = 1;
+              }
+            
+              document.getElementById("submitBtn").addEventListener("click", function() {
+                // Perform desired actions with the cartData
+                alert("Cart submitted!");
+                // Reset the cart data
+                cartData = [];
+                displayCart();
+              });
+            </script>
+            </div>
+
+        </div>
+      </div>
+    </div>
+</body>
+<footer>
+    <script src="https://kit.fontawesome.com/c6fae16368.js" crossorigin="anonymous"></script>
+</footer>
+</html>
