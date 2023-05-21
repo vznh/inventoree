@@ -1,5 +1,3 @@
-import csv
-import json
 from flask import Flask, request, jsonify, render_template
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
@@ -36,9 +34,9 @@ def display_fields():
 def display_editor():
     return render_template("editInventory.html")
 
-@app.route('/confirm')
+@app.route('/processing')
 def display_confirmation():
-    return render_template("confirm.html")
+    return render_template("processing.html")
 
 '''
 To be called functions
@@ -63,48 +61,93 @@ def initialize_database():
     current_year = datetime.now().year
     current_month = datetime.now().month
     # Initialize collections for each month
-    for month in range(1, 13):
-        # Create collection name using year and month name
-        month_name = month_names[month]
-        collection_name = f"{current_year}_{month_name}"
-        collection = db[collection_name]
+    collections = db.list_collection_names()
+    # Count the number of collections
+    collection_count = len(collections)
+    if collection_count == 0:
+        for month in range(1, 13):
+            # Create collection name using year and month name
+            month_name = month_names[month]
+            collection_name = f"{current_year}_{month_name}"
+            collection = db[collection_name]
 
-        # Create and insert documents for each type
-        types = ["pants", "shirt", "dress", "outerwear", "accessories", "shoes"]
-        for item_type in types:
-            document = {
-                "type": item_type,
-                "quantity": 0,
-                "student": 1,
-                "date-time": []
-            }
-            # Append the current date-time to the date-time array
-            document["date-time"].append(datetime.now().strftime("%d-%m-%y-%H"))
+            # Create and insert documents for each type
+            types = ["pants", "shirts", "dress", "outerwear", "accessories", "shoes", "books", "household", "school supplies", "bottoms", "misc."]
+            for item_type in types:
+                document = {
+                    "type": item_type,
+                    "quantity": 0,
+                    "student": [],
+                    "date-time": []
+                }
+                # Append the current date-time to the date-time array
+                document["date-time"].append(datetime.now().strftime("%d-%m-%y-%H"))
 
-            # Insert the document into the collection
-            collection.insert_one(document)
+                # Insert the document into the collection
+                collection.insert_one(document)
 
-def check_out_item(collection, type_of_item: str, quantity_of_item: int, studentQ: bool, date: str, last_updated: int) -> int:
+# Decrements and logs check-out
+def check_out_item(collection_name: str, type_of_item: str, quantity_of_item: int) -> int:
+    collection = db[collection_name]
     current_datetime = datetime.now()
-    formatted_datetime = current_datetime.strftime("%d-%m-%y-%H")
-    collection.update_one({"type": f"{type_of_item}"}, 
-                          {"$inc": {"quantity": -quantity_of_item}},
-                          {"$push": {"date-time": formatted_datetime}})
+    formatted_datetime = current_datetime.strftime("%d-%m-%y-%H") + ", check-out"
+    collection.update_one(
+        {"type": type_of_item},
+        {
+            "$inc": {"quantity": -quantity_of_item},
+            "$push": {"date-time": formatted_datetime}
+        },
+        upsert=False
+    )
 
 # Increments item in database
-def check_in_item(collection, type_of_item: str, quantity_of_item: int, studentQ: bool, date: str, last_updated: int) -> None:
+def check_in_item(collection_name: str, type_of_item: str, quantity_of_item: int, studentQ: bool) -> None:
+    collection = db[collection_name]
     current_datetime = datetime.now()
-    formatted_datetime = current_datetime.strftime("%d-%m-%y-%H")
-    collection.update_one({"type": f"{type_of_item}"}, 
-                          {"$inc": {"quantity": quantity_of_item}},
-                          {"$push": {"date-time": formatted_datetime}} )
+    formatted_datetime = current_datetime.strftime("%d-%m-%y-%H") + ", check-in"
+    collection.update_one(
+        {"type": type_of_item},
+        {
+            "$inc": {"quantity": quantity_of_item},
+            "$push": {
+                "student": studentQ,
+                "date-time": formatted_datetime
+            }
+        },
+        upsert=False  # Set upsert to False
+    )
 
 def import_data_from_ext(dataset):
     pass # To implement
 
-def rename_collection(collection: str, new_name: str) -> None:
+def rename_collection(collection: str, new_name: str) -> None: # Future implementation
     db.collection.rename(new_name)
-    
 
+def emergency_drop(): # Use in conjunction with initialize_database()
+    # Get a list of all collections
+    collections = db.list_collection_names()
+
+    # Remove each collection
+    for collection_name in collections:
+        db[collection_name].drop()
+
+def find_to_return(collection_name) -> dict:
+    data_map = dict()
+    base = db[collection_name]
+    documents = base.find()
+    for document in documents:
+        item_type = document["type"]
+        quantity = document["quantity"]
+        student = document["student"]
+        date_times = document["date-time"]
+        
+        # Store the extracted data in the dictionary
+        data_map[item_type] = {
+            "quantity": quantity,
+            "student": student,
+            "date_times": date_times
+    }
+    return data_map
+    
 if __name__ == '__main__':
     app.run(debug=True)
